@@ -11,7 +11,7 @@
 class AIEngine {
   constructor() {
     this.API_URL = 'https://openrouter.ai/api/v1/chat/completions';
-    this.DEFAULT_MODEL = 'google/gemini-2.0-flash-exp:free';
+    this.DEFAULT_MODEL = 'meta-llama/llama-3.3-70b-instruct:free';
     this.MAX_TOKENS = 1500;
     this._abortController = null;
 
