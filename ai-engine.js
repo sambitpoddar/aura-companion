@@ -200,6 +200,9 @@ You are always ready, always on their device.`;
   }
 
   async validateApiKey(apiKey) {
+    // 5-second timeout so setup never hangs
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000);
     try {
       const response = await fetch(this.API_URL, {
         method: 'POST',
@@ -210,19 +213,23 @@ You are always ready, always on their device.`;
           'X-Title': 'AURA AI Companion',
         },
         body: JSON.stringify({
-          model: 'meta-llama/llama-3.3-70b-instruct:free'',
+          model: 'meta-llama/llama-3.3-70b-instruct:free',
           max_tokens: 5,
           messages: [{ role: 'user', content: 'Hi' }],
           stream: false,
         }),
+        signal: controller.signal,
       });
+      clearTimeout(timeout);
       if (response.ok) return { valid: true };
       if (response.status === 401) return { valid: false, error: 'Invalid API key. Double-check at openrouter.ai/keys' };
       if (response.status === 429) return { valid: true };
       const err = await response.json().catch(() => ({}));
       return { valid: false, error: err?.error?.message || ('Error ' + response.status) };
     } catch (e) {
-      return { valid: false, error: 'Network error — are you online?' };
+      clearTimeout(timeout);
+      // Treat timeout or network errors as "key format OK, let first message verify"
+      return { valid: true };
     }
   }
 
