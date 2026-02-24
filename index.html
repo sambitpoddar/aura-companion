@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#ffffff" />
+  <meta name="description" content="AURA – Your on-device AI companion that anticipates your needs." />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="AURA" />
+  <title>AURA – AI Companion</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Ambient background -->
+  <div class="ambient-bg">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <canvas id="particle-canvas"></canvas>
+  </div>
+
+  <!-- Setup screen (first launch) -->
+  <div id="setup-screen" class="screen hidden">
+    <div class="setup-container">
+      <div class="aura-logo">
+        <div class="logo-ring"></div>
+        <span class="logo-text">AURA</span>
+      </div>
+      <h1 class="setup-title">Meet your<br/><em>intelligent companion</em></h1>
+      <p class="setup-sub">AURA lives on your device, learns your patterns, and surfaces what you need — before you ask.</p>
+      <div class="setup-form">
+        <div class="input-group">
+          <label>What should AURA call you?</label>
+          <input type="text" id="user-name-input" placeholder="Your name..." maxlength="30" />
+        </div>
+        <div class="input-group">
+          <label>Your OpenRouter API Key <span class="hint">(free, no credit card — openrouter.ai/keys)</span></label>
+          <input type="password" id="api-key-input" placeholder="sk-or-v1-..." />
+        </div>
+        <div class="input-group">
+          <label>What's your main focus area?</label>
+          <div class="focus-chips" id="focus-chips">
+            <button class="chip" data-value="work">Work & Productivity</button>
+            <button class="chip" data-value="learning">Learning & Research</button>
+            <button class="chip" data-value="creative">Creative Projects</button>
+            <button class="chip" data-value="health">Health & Wellness</button>
+            <button class="chip" data-value="personal">Personal Life</button>
+            <button class="chip" data-value="tech">Tech & Engineering</button>
+          </div>
+        </div>
+        <button class="btn-primary" id="setup-btn">Activate AURA →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main app -->
+  <div id="app-screen" class="screen hidden">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-left">
+        <div class="aura-pulse" id="aura-status">
+          <div class="pulse-ring"></div>
+          <span class="pulse-dot"></span>
+        </div>
+        <span class="header-name">AURA</span>
+      </div>
+      <div class="header-center">
+        <span class="greeting" id="dynamic-greeting">Good morning</span>
+      </div>
+      <div class="header-right">
+        <button class="icon-btn" id="context-btn" title="Context signals">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+        </button>
+        <button class="icon-btn" id="settings-btn" title="Settings">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Proactive suggestions bar -->
+    <div id="proactive-bar" class="proactive-bar hidden">
+      <div class="proactive-inner">
+        <div class="proactive-icon">✦</div>
+        <div class="proactive-content">
+          <span class="proactive-label">AURA noticed</span>
+          <p id="proactive-text"></p>
+        </div>
+        <button class="proactive-act" id="proactive-act-btn">Ask</button>
+        <button class="proactive-dismiss" id="proactive-dismiss-btn">✕</button>
+      </div>
+    </div>
+
+    <!-- Chat area -->
+    <main class="chat-area" id="chat-area">
+      <!-- Welcome state -->
+      <div class="welcome-state" id="welcome-state">
+        <div class="welcome-orb">
+          <div class="orb-inner"></div>
+        </div>
+        <h2 id="welcome-greeting">Hello, <span id="user-display-name"></span></h2>
+        <p class="welcome-sub">I'm watching over your session and ready when you need me.</p>
+        <div class="quick-actions" id="quick-actions">
+          <!-- Dynamically injected -->
+        </div>
+      </div>
+
+      <!-- Messages container -->
+      <div class="messages" id="messages"></div>
+    </main>
+
+    <!-- Input area -->
+    <div class="input-area">
+      <div class="input-wrapper">
+        <button class="attach-btn" id="voice-btn" title="Voice input">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg>
+        </button>
+        <textarea id="user-input" placeholder="Ask AURA anything…" rows="1" maxlength="4000"></textarea>
+        <button class="send-btn" id="send-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M2 21L23 12 2 3v7l15 2-15 2v7z"/></svg>
+        </button>
+      </div>
+      <div class="input-meta">
+        <span id="token-hint" class="token-hint"></span>
+        <span class="model-badge">OpenRouter · free models · on-device context</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings panel -->
+  <div id="settings-panel" class="panel hidden">
+    <div class="panel-header">
+      <h3>Settings</h3>
+      <button class="close-panel" id="close-settings">✕</button>
+    </div>
+    <div class="panel-body">
+      <div class="setting-group">
+        <label>Your Name</label>
+        <input type="text" id="settings-name" />
+      </div>
+      <div class="setting-group">
+        <label>API Key</label>
+        <input type="password" id="settings-api-key" />
+      </div>
+      <div class="setting-group">
+        <label>Proactive Suggestions</label>
+        <label class="toggle">
+          <input type="checkbox" id="toggle-proactive" checked />
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="setting-group">
+        <label>Model</label>
+        <select id="model-select">
+          <option value="google/gemini-2.0-flash-exp:free">Gemini 2.0 Flash Exp — FREE ⚡ (recommended)</option>
+          <option value="meta-llama/llama-3.3-70b-instruct:free">Llama 3.3 70B — FREE 🦙 (very capable)</option>
+          <option value="deepseek/deepseek-r1:free">DeepSeek R1 — FREE 🧠 (best reasoning)</option>
+          <option value="mistralai/mistral-7b-instruct:free">Mistral 7B — FREE 🌬️ (fast &amp; light)</option>
+          <option value="openrouter/free">Auto (random free model) 🎲</option>
+        </select>
+      </div>
+      <div class="setting-group">
+        <label>Memory depth (messages)</label>
+        <input type="number" id="memory-depth" min="4" max="40" value="20" />
+      </div>
+      <button class="btn-primary" id="save-settings-btn">Save Settings</button>
+      <button class="btn-danger" id="clear-memory-btn">Clear Memory & History</button>
+    </div>
+  </div>
+
+  <!-- Context panel -->
+  <div id="context-panel" class="panel hidden">
+    <div class="panel-header">
+      <h3>Context Signals</h3>
+      <button class="close-panel" id="close-context">✕</button>
+    </div>
+    <div class="panel-body" id="context-panel-body">
+      <!-- Dynamically populated -->
+    </div>
+  </div>
+
+  <div class="overlay hidden" id="overlay"></div>
+
+  <script src="context-engine.js"></script>
+  <script src="memory-engine.js"></script>
+  <script src="ai-engine.js"></script>
+  <script src="app.js"></script>
+  <script src="register-sw.js"></script>
+</body>
+</html>
