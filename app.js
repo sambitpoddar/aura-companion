@@ -159,19 +159,11 @@
         showToast('OpenRouter keys start with sk-or-v1-'); dom.apiKeyInput.focus(); return;
       }
 
-      dom.setupBtn.textContent = 'Validating key…';
+      dom.setupBtn.textContent = 'Activating…';
       dom.setupBtn.disabled = true;
 
-      const result = await window.aiEngine.validateApiKey(apiKey);
-
-      if (!result.valid) {
-        showToast(result.error || 'Invalid API key');
-        dom.setupBtn.textContent = 'Activate AURA →';
-        dom.setupBtn.disabled = false;
-        return;
-      }
-
-      // Save profile
+      // Save profile immediately — no blocking validation.
+      // Key errors surface naturally on first message with a clear error toast.
       window.memoryEngine.saveProfile({
         name,
         apiKey,
@@ -182,8 +174,7 @@
         createdAt: Date.now(),
       });
 
-      dom.setupBtn.textContent = 'Activating…';
-      await sleep(400);
+      await sleep(300);
       showApp();
     });
 
