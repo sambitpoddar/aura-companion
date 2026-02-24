@@ -20,7 +20,6 @@ class AIEngine {
      * If the primary model rate-limits (429), we try the next automatically.
      */
     this.FREE_MODEL_FALLBACKS = [
-      'google/gemini-2.0-flash-exp:free',
       'meta-llama/llama-3.3-70b-instruct:free',
       'deepseek/deepseek-r1:free',
       'mistralai/mistral-7b-instruct:free',
@@ -211,7 +210,7 @@ You are always ready, always on their device.`;
           'X-Title': 'AURA AI Companion',
         },
         body: JSON.stringify({
-          model: 'google/gemini-2.0-flash-exp:free',
+          model: 'meta-llama/llama-3.3-70b-instruct:free'',
           max_tokens: 5,
           messages: [{ role: 'user', content: 'Hi' }],
           stream: false,
