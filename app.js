@@ -177,7 +177,7 @@
         apiKey,
         focusAreas: state.selectedFocusAreas,
         proactiveEnabled: true,
-        model: 'google/gemini-2.0-flash-exp:free',
+        model: 'meta-llama/llama-3.3-70b-instruct:free',
         memoryDepth: 20,
         createdAt: Date.now(),
       });
