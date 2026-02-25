@@ -25,7 +25,7 @@
   --ai-bg:         #ffffff;
   --success:       #34c759;
   --danger:        #ff3b30;
-  --radius:        18px;
+  --radius:        999px;
   --radius-sm:     12px;
   --radius-xs:     50px;
   --radius-pill:   999px;
@@ -484,7 +484,7 @@ select {
   display:flex;align-items:flex-end;gap:10px;
   background:var(--white);
   border:1px solid var(--border-mid);
-  border-radius: 180px;
+  border-radius:var(--radius);
   padding:10px 10px 10px 15px;
   box-shadow:var(--shadow-sm);
   transition:border-color var(--dur) var(--ease),box-shadow var(--dur) var(--ease);
