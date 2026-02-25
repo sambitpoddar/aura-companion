@@ -741,10 +741,14 @@
   //  UTILITY FUNCTIONS
   // ──────────────────────────────────────────
 
-  function autoResize(el) {
-    el.style.height = 'auto';
-    el.style.height = Math.min(el.scrollHeight, 160) + 'px';
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 180) + 'px';
+  const wrapper = el.closest('.input-wrapper');
+  if (wrapper) {
+    wrapper.style.borderRadius = el.scrollHeight > 44 ? '18px' : '999px';
   }
+}
 
   function sleep(ms) {
     return new Promise(r => setTimeout(r, ms));
