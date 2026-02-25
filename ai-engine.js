@@ -46,7 +46,7 @@ ${memorySummary || 'Fresh session — no prior history.'}
 ## Response Rules
 1. Be concise — say more with fewer words
 2. Use **bold** for key terms, \`code\` for technical terms, and bullet points for lists
-3. Reference device context (time, battery, etc.) only when genuinely relevant
+3. Reference device context (time, battery, etc.) ONLY WHEN genuinely relevant and not all the time
 4. Morning -> energising and forward-looking tone
 5. Evening -> reflective, wrap-up focused
 6. Low battery -> acknowledge and help save important info
