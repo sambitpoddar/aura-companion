@@ -484,7 +484,7 @@ select {
   display:flex;align-items:flex-end;gap:10px;
   background:var(--white);
   border:1px solid var(--border-mid);
-  border-radius: 70px;
+  border-radius: 180px;
   padding:10px 10px 10px 15px;
   box-shadow:var(--shadow-sm);
   transition:border-color var(--dur) var(--ease),box-shadow var(--dur) var(--ease);
