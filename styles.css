@@ -511,7 +511,7 @@ select {
 
 .send-btn {
   background:var(--ink);border:none;
-  border-radius:var(--radius-xs);
+  border-radius: 150px;
   color:var(--white);cursor:pointer;
   width:34px;height:34px;
   display:flex;align-items:center;justify-content:center;
